@@ -3,11 +3,15 @@ require 'sidekiq'
 Sidekiq.configure_client do |config|
   config.redis =
     if ENV['REDIS_SENTINEL_SERVICE'].nil?
-      { url: (ENV['REDIS_URL'] || 'redis://redis') }
+      { 
+        url: (ENV['REDIS_URL'] || 'redis://redis'), 
+        namespace: ENV['REDIS_NAMESPACE'] 
+      }
     else
       {
         url: (ENV['REDIS_URL'] || 'redis://mymaster'),
-        sentinels: [{ host: ENV['REDIS_SENTINEL_SERVICE'], port: '26379' }]
+        sentinels: [{ host: ENV['REDIS_SENTINEL_SERVICE'], port: '26379' }],
+        namespace: ENV['REDIS_NAMESPACE']
       }
     end
 end
