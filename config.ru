@@ -18,4 +18,5 @@ end
 
 require 'set'
 require 'sidekiq/web'
-run Sidekiq::Web
+# run Sidekiq::Web
+run Rack::URLMap.new(ENV.fetch('SIDEKIQ_PATH', '/sidekiq') => Sidekiq::Web)
